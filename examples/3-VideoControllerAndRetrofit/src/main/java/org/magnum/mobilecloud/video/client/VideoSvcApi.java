@@ -2,11 +2,11 @@ package org.magnum.mobilecloud.video.client;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
 import org.magnum.mobilecloud.video.controller.Video;
-
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.POST;
 
 /**
  * This interface defines an API for a VideoSvc. The
@@ -21,14 +21,12 @@ import retrofit.http.POST;
  *
  */
 public interface VideoSvcApi {
-	
 	// The path where we expect the VideoSvc to live
-	public static final String VIDEO_SVC_PATH = "/video";
+		public static final String VIDEO_SVC_PATH = "video";
 
-	@GET(VIDEO_SVC_PATH)
-	public List<Video> getVideoList();
-	
-	@POST(VIDEO_SVC_PATH)
-	public boolean addVideo(@Body Video v);
-	
+		@GET(VIDEO_SVC_PATH)
+		public Call<List<Video>> getVideoList();
+		
+		@POST(VIDEO_SVC_PATH)
+		public Call<Boolean> addVideo(@Body Video v);
 }

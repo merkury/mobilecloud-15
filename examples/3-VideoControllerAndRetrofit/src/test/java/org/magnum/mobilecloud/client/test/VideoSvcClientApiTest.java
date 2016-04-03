@@ -7,9 +7,10 @@ import java.util.List;
 import org.junit.Test;
 import org.magnum.mobilecloud.video.client.VideoSvcApi;
 import org.magnum.mobilecloud.video.controller.Video;
-
-import retrofit.RestAdapter;
-import retrofit.RestAdapter.LogLevel;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
  * 
@@ -34,8 +35,10 @@ import retrofit.RestAdapter.LogLevel;
  *
  */
 public class VideoSvcClientApiTest {
-
-	private final String TEST_URL = "http://localhost:8080";
+	
+	//https://futurestud.io/blog/retrofit-2-upgrade-guide-from-1-9
+	//Pro Tip: use relative urls for your partial endpoint urls and end your base url with the trailing slash /.
+	private final String TEST_URL = "http://localhost:8080/";
 
 	/**
 	 * This is how we turn the VideoSvcApi into an object that
@@ -43,9 +46,10 @@ public class VideoSvcClientApiTest {
 	 * methods into HTTP requests on the server. Parameters / return
 	 * values are being marshalled to/from JSON.
 	 */
-	private VideoSvcApi videoService = new RestAdapter.Builder()
-			.setEndpoint(TEST_URL)
-			.setLogLevel(LogLevel.FULL)
+	private VideoSvcApi videoService = new Retrofit.Builder()
+			.baseUrl(TEST_URL)
+			//.setLogLevel(LogLevel.FULL)
+			.addConverterFactory(JacksonConverterFactory.create())
 			.build()
 			.create(VideoSvcApi.class);
 
@@ -68,10 +72,15 @@ public class VideoSvcClientApiTest {
 		// Notice how Retrofit provides a nice strongly-typed interface to our
 		// HTTP-accessible video service that is much cleaner than muddling around
 		// with URL query parameters, etc.
-		boolean ok = videoService.addVideo(video);
+		Call<Boolean> addVideoCall = videoService.addVideo(video);
+		Response<Boolean> respBool = addVideoCall.execute();
+		Boolean ok = respBool.body();
 		assertTrue(ok);
 		
-		List<Video> videos = videoService.getVideoList();
+		Call<List<Video>> listVideosCall = videoService.getVideoList();
+		Response<List<Video>> responseVideos = listVideosCall.execute();
+		List<Video> videos = responseVideos.body();
+		assertTrue(videos.size()>0);
 		assertTrue(videos.contains(video));
 	}
 

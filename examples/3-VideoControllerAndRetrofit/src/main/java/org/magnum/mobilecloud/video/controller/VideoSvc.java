@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Spring allows us to dramatically simplify our service. Another important
  * aspect of this version is that we have defined a VideoSvcApi that provides
  * strong typing on both the client and service interface to ensure that we
- * don't send the wrong paraemters, etc.
+ * don't send the wrong parameters, etc.
  * 
  * @author jules
  *
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 // Tell Spring that this class is a Controller that should 
 // handle certain HTTP requests for the DispatcherServlet
 @Controller
-public class VideoSvc implements VideoSvcApi {
+public class VideoSvc {
 	
 	// An in-memory list that the servlet uses to store the
 	// videos that are sent to it by clients
@@ -42,7 +42,7 @@ public class VideoSvc implements VideoSvcApi {
 	// annotation on the Video parameter is what tells Spring
 	// to interpret the HTTP request body as JSON and convert
 	// it into a Video object to pass into the method. The
-	// @ResponseBody annotation tells Spring to conver the
+	// @ResponseBody annotation tells Spring to convert the
 	// return value from the method back into JSON and put
 	// it into the body of the HTTP response to the client.
 	//
@@ -55,8 +55,8 @@ public class VideoSvc implements VideoSvcApi {
 	// in the Video object, please see this Spring guide:
 	// http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/validation.html#validation-beanvalidation
 	//
-	@RequestMapping(value=VIDEO_SVC_PATH, method=RequestMethod.POST)
-	public @ResponseBody boolean addVideo(@RequestBody Video v){
+	@RequestMapping(value=VideoSvcApi.VIDEO_SVC_PATH, method=RequestMethod.POST)
+	public @ResponseBody boolean addVideo(@RequestBody Video v) {
 		return videos.add(v);
 	}
 	
@@ -64,7 +64,7 @@ public class VideoSvc implements VideoSvcApi {
 	// list of videos in memory. Spring automatically converts
 	// the list of videos to JSON because of the @ResponseBody
 	// annotation.
-	@RequestMapping(value=VIDEO_SVC_PATH, method=RequestMethod.GET)
+	@RequestMapping(value=VideoSvcApi.VIDEO_SVC_PATH, method=RequestMethod.GET)
 	public @ResponseBody List<Video> getVideoList(){
 		return videos;
 	}
