@@ -21,5 +21,4 @@ proguard/
 build/
 bin/
 gradle/
-gradlew
-gradlew.bat
+
